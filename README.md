@@ -3,9 +3,12 @@
 A C++ program that reads a plain-text file describing UML class diagrams, builds an in-memory object model, and automatically generates compilable `.h` C++ header files — one per class.
 
 ---
+## Phase 1 demo:
+
+https://github.com/user-attachments/assets/6aae2bcf-93eb-42d7-ac31-944379da3924
+
 
 ## Table of Contents
-
 - [Project Overview](#project-overview)
 - [The 4-Layer Architecture](#the-4-layer-architecture)
 - [File Structure](#file-structure)
