@@ -347,4 +347,4 @@ Follow this order when writing the code from scratch:
 
 ---
 
-> **Note:** The OOP model layer and the code generation engine (Phase 1) are fully implemented with proper encapsulation. `UMLAttribute`, `UMLMethod`, and `UMLClass` are complete; `CPPCodeGenerator` successfully produces compilable C++ header files from UML data. The next step is wiring the file parser to automate input.
+> **Phase 1 target:** Implement the OOP model layer (`UMLAttribute`, `UMLMethod`, `UMLClass`) with proper encapsulation, and the `CPPCodeGenerator` that produces compilable C++ header files from those objects. `UMLParser` is **not** part of Phase 1 — connecting the parser to automate file-driven input is the Phase 2 goal.
