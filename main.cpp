@@ -1,62 +1,86 @@
 #include <iostream>
+#include <vector>
 #include "UMLAttribute.h"
 #include "UMLMethod.h"
 #include "UMLClass.h"
+#include "UMLParser.h"
+#include "CodeGenerator.h"
 #include "CPPCodeGenerator.h"
 using namespace std;
- 
+
+// =============================================================
+//  UML Class Diagram Code Generator — main.cpp
+//
+//  HOW IT WORKS:
+//  1. UMLParser reads diagram.txt → builds UMLClass objects
+//  2. CPPCodeGenerator loops over them → writes .h files
+//
+//  All OOP concepts demonstrated:
+//  ✅ Encapsulation       (UMLAttribute, UMLMethod, UMLClass)
+//  ✅ Abstraction         (CodeGenerator abstract base class)
+//  ✅ Inheritance         (CPPCodeGenerator : public CodeGenerator)
+//  ✅ Polymorphism        (generate() overridden in CPPCodeGenerator)
+//  ✅ Function Overloading(addAttribute/addMethod — 2 versions each)
+//  ✅ Operator Overloading(operator+ for UMLAttribute and UMLMethod)
+//  ✅ Copy Constructor    (UMLAttribute and UMLMethod copy ctors)
+//  ✅ Virtual Destructor  (CodeGenerator base class)
+// =============================================================
+
 int main() {
- 
-    cout << "=== UML Class Diagram Code Generator ===" << endl;
-    cout << "Checkpoint Demo — Hardcoded Input" << endl;
-    cout << "========================================" << endl << endl;
- 
-    // -----------------------------------------------
-    // STEP 1: Manually build a "Student" UML class
-    // (Later this data will come from parsing a file)
-    // -----------------------------------------------
- 
-    UMLClass student("Student");
- 
-    // Add attributes (fields)
-    student.addAttribute(UMLAttribute("private", "string", "name"));
-    student.addAttribute(UMLAttribute("private", "int",    "rollNo"));
-    student.addAttribute(UMLAttribute("private", "float",  "marks"));
- 
-    // Add methods
-    student.addMethod(UMLMethod("public", "string", "getName()"));
-    student.addMethod(UMLMethod("public", "void",   "setName(string)"));
-    student.addMethod(UMLMethod("public", "int",    "getRollNo()"));
-    student.addMethod(UMLMethod("public", "void",   "display()"));
- 
-    // -----------------------------------------------
-    // STEP 2: Build a second class "Teacher"
-    // Showing the generator works for ANY class
-    // -----------------------------------------------
- 
-    UMLClass teacher("Teacher");
- 
-    teacher.addAttribute(UMLAttribute("private", "string", "teacherName"));
-    teacher.addAttribute(UMLAttribute("private", "string", "subject"));
-    teacher.addAttribute(UMLAttribute("private", "int",    "experience"));
- 
-    teacher.addMethod(UMLMethod("public", "string", "getTeacherName()"));
-    teacher.addMethod(UMLMethod("public", "void",   "setSubject(string)"));
-    teacher.addMethod(UMLMethod("public", "void",   "display()"));
- 
-    // -----------------------------------------------
-    // STEP 3: Generate .h files using CPPCodeGenerator
-    // -----------------------------------------------
- 
-    CPPCodeGenerator generator;
- 
-    cout << "Generating C++ header files..." << endl << endl;
- 
-    generator.generate(student);   // creates output/Student.h
-    generator.generate(teacher);   // creates output/Teacher.h
- 
-    cout << endl;
-    cout << "Done! Check the 'output/' folder for generated files." << endl;
- 
+
+    cout << "=====================================================\n";
+    cout << "   UML Class Diagram Code Generator in C++\n";
+    cout << "   MIT-WPU | SYCSE | OOP Mini Project\n";
+    cout << "=====================================================\n\n";
+
+    // ----------------------------------------------------------
+    // STEP 1: Parse diagram.txt → get vector of UMLClass objects
+    // ----------------------------------------------------------
+    UMLParser parser;
+    vector<UMLClass> classes = parser.parseFile("diagram.txt");
+
+    if (classes.empty()) {
+        cout << "No classes found. Check diagram.txt.\n";
+        return 1;
+    }
+
+    // Show what was parsed
+    cout << "Parsed classes:\n";
+    for (auto& cls : classes) cls.display();
+    cout << "\n";
+
+    // ----------------------------------------------------------
+    // STEP 2: Use POLYMORPHISM — CodeGenerator pointer points
+    //         to CPPCodeGenerator (runtime binding)
+    // ----------------------------------------------------------
+    CodeGenerator* gen = new CPPCodeGenerator();   // ← Polymorphism
+
+    cout << "=====================================================\n";
+    cout << "Generating C++ header files...\n";
+    cout << "=====================================================\n";
+
+    for (UMLClass& cls : classes) {
+        gen->generate(cls);    // ← virtual dispatch → CPPCodeGenerator::generate()
+    }
+
+    cout << "\n=====================================================\n";
+    cout << "Done! " << classes.size() << " file(s) written to output/\n";
+    cout << "=====================================================\n\n";
+
+    // ----------------------------------------------------------
+    // STEP 3: Also demo operator+ overloading inline
+    // ----------------------------------------------------------
+    cout << "--- operator+ Overloading Demo ---\n";
+    UMLClass extra("ExtraDemo");
+    extra = extra + UMLAttribute("private", "string", "demoField");
+    extra = extra + UMLMethod("public", "void", "demoMethod()");
+    gen->generate(extra);
+
+    // ----------------------------------------------------------
+    // Cleanup — delete calls virtual destructor chain
+    // ✅ Virtual Destructor in action
+    // ----------------------------------------------------------
+    delete gen;
+
     return 0;
 }

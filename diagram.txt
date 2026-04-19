@@ -1,0 +1,49 @@
+// UML Class Diagram Input File
+// Format:
+//   CLASS ClassName
+//   CLASS ClassName EXTENDS ParentName
+//   ATTR  access type name
+//   METHOD access returnType signature
+//   END
+
+// ─── Class 1: Person (Base class) ───────────────────────────
+CLASS Person
+ATTR protected string name
+ATTR protected int age
+METHOD public string getName()
+METHOD public void setName(string name)
+METHOD public int getAge()
+METHOD public void display()
+END
+
+// ─── Class 2: Student (inherits Person) ─────────────────────
+CLASS Student EXTENDS Person
+ATTR private int rollNo
+ATTR private float marks
+ATTR private string branch
+METHOD public int getRollNo()
+METHOD public float getMarks()
+METHOD public void setMarks(float marks)
+METHOD public void display()
+END
+
+// ─── Class 3: Teacher ────────────────────────────────────────
+CLASS Teacher
+ATTR private string teacherName
+ATTR private string subject
+ATTR private int employeeId
+METHOD public string getTeacherName()
+METHOD public string getSubject()
+METHOD public void setSubject(string subject)
+METHOD public void display()
+END
+
+// ─── Class 4: Course ─────────────────────────────────────────
+CLASS Course
+ATTR private string courseCode
+ATTR private string courseName
+ATTR private int credits
+METHOD public string getCourseCode()
+METHOD public string getCourseName()
+METHOD public void display()
+END
